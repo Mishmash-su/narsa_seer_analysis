@@ -1,0 +1,17 @@
+library(rhdf5)
+distances <- read.csv("all_distances.csv", header=FALSE, stringsAsFactors=FALSE)
+projection <- cmdscale(distances, k = 3, eig = T)
+covariates <- projection[["points"]]
+
+for (i in 1:3)
+{
+   covariates[,i] <- covariates[,i]/max(abs(covariates[,i]))
+}
+
+h5createFile("projection")
+h5write(covariates,"projection","dataset")
+H5close()
+
+pdf("scree_plot.pdf")
+plot(projection[[2]][1:30], type='l', xlab="Dimensions", ylab="Eigenvalue", main="Scree plot")
+dev.off()

@@ -1,0 +1,43 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(rhdf5)
+> distances <- read.csv("all_distances.csv", header=FALSE, stringsAsFactors=FALSE)
+> projection <- cmdscale(distances, k = 3, eig = T)
+> covariates <- projection[["points"]]
+> 
+> for (i in 1:3)
++ {
++    covariates[,i] <- covariates[,i]/max(abs(covariates[,i]))
++ }
+> 
+> h5createFile("projection")
+[1] TRUE
+> h5write(covariates,"projection","dataset")
+> H5close()
+> 
+> pdf("scree_plot.pdf")
+> plot(projection[[2]][1:30], type='l', xlab="Dimensions", ylab="Eigenvalue", main="Scree plot")
+> dev.off()
+null device 
+          1 
+> 
+> proc.time()
+   user  system elapsed 
+  0.329   0.064   1.121 

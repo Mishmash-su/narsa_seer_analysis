@@ -136,7 +136,7 @@ RSCRIPT
    my $R_command = "$R_exec CMD BATCH --no-save --no-restore $tmp_file_name";
    system($R_command);
 
-   unlink($tmp_file_name, "$tmp_file_name.Rout");
+#   unlink($tmp_file_name, "$tmp_file_name.Rout");
 }
 
 exit(0);
